@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:MyNotes.ViewModels"
+             x:Class="MyNotes.Views.NotePage"
+             Title="Note">
+    <ContentPage.BindingContext>
+        <local:NotePageViewModel/>
+    </ContentPage.BindingContext>
+    
+    <VerticalStackLayout Spacing="10" Margin="5">
+        <Editor Text="{Binding EditorText}"
+                x:Name="NoteEditor"
+                Placeholder="Enter your note"
+                HeightRequest="100"/>
+
+        <Grid ColumnDefinitions="*,*" ColumnSpacing="4">
+            <Button Text="Save"
+                    Command="{Binding SaveNoteCommand}"/>
+                    <!--CommandParameter="{Binding Source={x:Reference NoteEditor}, Path=Text}"-->
+            <Button Text="Delete"
+                    Grid.Column="1"
+                    Command="{Binding DeleteNoteCommand}"/>
+                    <!--CommandParameter="{Binding Source={x:Reference NoteEditor}, Path=Text}"/>-->
+        </Grid>
+    </VerticalStackLayout>
+</ContentPage>
