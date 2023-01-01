@@ -32,13 +32,9 @@
 		<FileVersion>0.1.0.0</FileVersion>
 	</PropertyGroup>
 
-	<!--<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net6.0-android|AnyCPU'">-->
 	<!--<PropertyGroup Condition="$(TargetFramework.Contains('-android')) and '$(Configuration)' == 'Release'">
-	  <ApplicationDisplayVersion>0.1.0</ApplicationDisplayVersion>
-	  <ApplicationVersion>1</ApplicationVersion>
-	  <ApplicationTitle>My Notes</ApplicationTitle>
 		<AndroidKeyStore>True</AndroidKeyStore>
-		<AndroidSingingKeyStore>myapp.keystore</AndroidSingingKeyStore>
+		<AndroidSingingKeyStore>..\mynotes.keystore</AndroidSingingKeyStore>
 		<AndroidSigningKeyAlias>key</AndroidSigningKeyAlias>
 		<AndroidSigningKeyPass></AndroidSigningKeyPass>
 		<AndroidSigningStorePass></AndroidSigningStorePass>
