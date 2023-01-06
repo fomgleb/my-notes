@@ -7,11 +7,15 @@
 
     <TabBar>
         <ShellContent Title="Notes"
-                      ContentTemplate="{DataTemplate views:NotePage}"
+                      ContentTemplate="{DataTemplate views:AllNotesPage}"
                       Icon="icon_notes"/>
         <ShellContent Title="About"
                       ContentTemplate="{DataTemplate views:AboutPage}"
                       Icon="icon_about"/>
-    </TabBar>    
-    
+    </TabBar>
+
+    <ShellContent Title="Note"
+                  ContentTemplate="{DataTemplate views:NotePage}"
+                  Route="NotePage"/>
+
 </Shell>

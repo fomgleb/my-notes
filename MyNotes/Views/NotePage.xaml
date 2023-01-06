@@ -1,27 +1,37 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:local="clr-namespace:MyNotes.ViewModels"
+             xmlns:vm="clr-namespace:MyNotes.ViewModels"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="MyNotes.Views.NotePage"
              Title="Note">
     <ContentPage.BindingContext>
-        <local:NotePageViewModel/>
+        <vm:NotePageViewModel/>
     </ContentPage.BindingContext>
-    
-    <VerticalStackLayout Spacing="10" Margin="5">
-        <Editor Text="{Binding EditorText}"
+
+    <ContentPage.Behaviors>
+        <toolkit:EventToCommandBehavior EventName="Appearing"
+                                        Command="{Binding UpdateEditorTextCommand}"/>
+        <toolkit:EventToCommandBehavior EventName="Appearing"
+                                        Command="{Binding FocusOnEditorCommand}"
+                                        CommandParameter="{x:Reference NoteEditor}"/>
+    </ContentPage.Behaviors>
+
+    <Grid RowDefinitions="400,70">
+        <Editor Text="{Binding EditorText, Mode=TwoWay}"
                 x:Name="NoteEditor"
                 Placeholder="Enter your note"
-                HeightRequest="100"/>
-
-        <Grid ColumnDefinitions="*,*" ColumnSpacing="4">
-            <Button Text="Save"
-                    Command="{Binding SaveNoteCommand}"/>
-                    <!--CommandParameter="{Binding Source={x:Reference NoteEditor}, Path=Text}"-->
+                Margin="10"
+                HorizontalOptions="Fill"/>
+        <Grid Grid.Row="1" ColumnDefinitions="*,*" ColumnSpacing="4" Margin="10">
             <Button Text="Delete"
-                    Grid.Column="1"
                     Command="{Binding DeleteNoteCommand}"/>
-                    <!--CommandParameter="{Binding Source={x:Reference NoteEditor}, Path=Text}"/>-->
+            <Button Text="Save"
+                    Grid.Column="1"
+                    Command="{Binding SaveNoteCommand}"/>
         </Grid>
-    </VerticalStackLayout>
+        
+    </Grid>
 </ContentPage>
+
+<!--CommandParameter="{Binding Source={x:Reference NoteEditor}, Path=Text}"-->

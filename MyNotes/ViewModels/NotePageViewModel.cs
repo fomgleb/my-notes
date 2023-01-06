@@ -1,53 +1,55 @@
-﻿using System.ComponentModel;
-using MyNotes.Models;
+﻿using MyNotes.Models;
+using System.ComponentModel;
 
 namespace MyNotes.ViewModels
 {
+    [QueryProperty(nameof(EditingNote), nameof(EditingNote))]
     public class NotePageViewModel : ViewModelBase
     {
-        private const string NOTES_STORAGE_FILE_NAME = "notes.txt";
-
-        private readonly string pathToStorageNotes = Path.Combine(FileSystem.AppDataDirectory, NOTES_STORAGE_FILE_NAME);
-
         public string EditorText { get => _editorText; set => Set(ref _editorText, value); }
-        private string _editorText = string.Empty;
+        private string _editorText;
+
+        public TextFile EditingNote { get => _editingNote; set => Set(ref _editingNote, value); }
+        private TextFile _editingNote;
 
         public Command SaveNoteCommand { get; }
         public Command DeleteNoteCommand { get; }
-
-        private readonly TxtFileStorage noteFileStorage;
+        public Command UpdateEditorTextCommand { get; }
+        public Command FocusOnEditorCommand { get; }
 
         public NotePageViewModel()
         {
-            noteFileStorage = new TxtFileStorage(pathToStorageNotes);
-
-            #region Commands
             SaveNoteCommand = new Command(
-                execute: () =>
+                execute: async () =>
                 {
-                    noteFileStorage.Save(EditorText);
-                    RefreshCanExecutes();
+                    EditingNote.Text = EditorText;
+                    EditorText = string.Empty;
+                    await Shell.Current.GoToAsync("..", true);
                 },
                 canExecute: () =>
                 {
-                    return noteFileStorage.Load() != EditorText;
+                    return EditorText != null && EditorText != EditingNote.Text;
                 });
 
             DeleteNoteCommand = new Command(
+                execute: async () =>
+                {
+                    EditingNote.Delete();
+                    await Shell.Current.GoToAsync("..", true);
+                });
+
+            UpdateEditorTextCommand = new Command(
                 execute: () =>
                 {
-                    noteFileStorage.Save(string.Empty);
-                    EditorText = string.Empty;
-                    DeleteNoteCommand.ChangeCanExecute();
-                },
-                canExecute: () =>
-                {
-                    return noteFileStorage.Load() != string.Empty;
+                    EditorText = EditingNote.Text;
                 });
-            #endregion
 
-            var loadedText = noteFileStorage.Load();
-            EditorText = loadedText ?? string.Empty;
+            FocusOnEditorCommand = new Command(
+                execute: async editor =>
+                {
+                    await Task.Delay(600);
+                    ((Editor)editor).Focus();
+                });
 
             PropertyChanged += OnPropertyChanged;
         }

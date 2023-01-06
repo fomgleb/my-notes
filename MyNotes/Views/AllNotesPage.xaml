@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:MyNotes.ViewModels"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             x:Class="MyNotes.Views.AllNotesPage"
+             Title="Notes">
+    <ContentPage.BindingContext>
+        <vm:AllNotesPageViewModel/>
+    </ContentPage.BindingContext>
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <toolkit:SelectedItemEventArgsConverter x:Key="SelectedItemEventArgsConverter"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <Grid>
+        <ListView ItemsSource="{Binding NotesCollection}"
+                  HasUnevenRows="True">
+            <ListView.Behaviors>
+                <toolkit:EventToCommandBehavior EventName="ItemSelected"
+                                                Command="{Binding EditNoteCommand}"
+                                                EventArgsConverter="{StaticResource SelectedItemEventArgsConverter}"/>
+            </ListView.Behaviors>
+            <ListView.ItemTemplate>
+                <DataTemplate >
+                    <ViewCell>
+                        <Label Text="{Binding Text}"
+                               FontSize="20"
+                               Padding="15"/>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+        <AbsoluteLayout>
+            <ImageButton Source="plus_icon.png"
+                         CornerRadius="40"
+                         AbsoluteLayout.LayoutFlags="PositionProportional"
+                         AbsoluteLayout.LayoutBounds=".95,.95,80,80"
+                         Command="{Binding AddNewNoteCommand}"/>
+        </AbsoluteLayout>
+    </Grid>
+    
+    
+    
+    
+</ContentPage>
