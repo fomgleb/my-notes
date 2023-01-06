@@ -21,7 +21,6 @@ namespace MyNotes.ViewModels
             AddNewNoteCommand = new Command(
                 execute: async () =>
                 {
-                    var stuff = nameof(NotePageViewModel.EditingNote);
                     var navigationParameter = new Dictionary<string, object>
                     {
                         { nameof(NotePageViewModel.EditingNote), _notesSaverLoader.CreateFile(string.Empty) }

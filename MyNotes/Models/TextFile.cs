@@ -9,7 +9,9 @@
             set
             {
                 _text = value;
+                var fileCreationTime = File.GetLastWriteTime(PathToFile);
                 File.WriteAllText(PathToFile, value);
+                File.SetLastWriteTime(PathToFile, fileCreationTime);
             }
         }
         private string _text;
