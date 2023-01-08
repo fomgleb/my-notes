@@ -1,22 +1,28 @@
-﻿using System.Windows.Input;
-
-namespace MyNotes.ViewModels
+﻿namespace MyNotes.ViewModels
 {
     public class AboutPageViewModel : ViewModelBase
     {
+        private const string ABOUT_MAUI_LINK = "https://aka.ms/maui";
+        private const string APP_ON_GITHUB_LINK = "https://github.com/fomgleb/my-notes";
+
         public string Title => AppInfo.Name;
         public string Version => AppInfo.VersionString;
-        public string MoreInfoUrl => "https://aka.ms/maui";
-        public string Message => "This app is written in XAML and C# with .NET MAUI.";
 
-        public ICommand LearnMoreCommand { get; }
+        public Command OpenWebsiteAboutMaui { get; }
+        public Command OpenWebsiteAppOnGithub { get; }
 
         public AboutPageViewModel()
         {
-            LearnMoreCommand = new Command(
+            OpenWebsiteAboutMaui = new Command(
                 execute: async () =>
                 {
-                    await Launcher.Default.OpenAsync(MoreInfoUrl);
+                    await Launcher.Default.OpenAsync(ABOUT_MAUI_LINK);
+                });
+
+            OpenWebsiteAppOnGithub = new Command(
+                execute: async () =>
+                {
+                    await Launcher.Default.OpenAsync(APP_ON_GITHUB_LINK);
                 });
         }
     }
