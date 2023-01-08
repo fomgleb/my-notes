@@ -22,7 +22,7 @@
     </Shell.TitleView>
 
     <Shell.BackButtonBehavior>
-        <BackButtonBehavior Command="{Binding OnBackButtonClickCommand}" Shell.FlyoutHeight="10" Shell.FlyoutWidth="10"/>
+        <BackButtonBehavior Command="{Binding OnBackButtonClickCommand}"/>
     </Shell.BackButtonBehavior>
 
     <ContentPage.Behaviors>
