@@ -8,9 +8,22 @@
         <vm:NotePageViewModel/>
     </ContentPage.BindingContext>
 
-    <NavigationPage.TitleView>
-        <Label Text="Why are you gay?"/>
-    </NavigationPage.TitleView>
+    <Shell.TitleView>
+        <HorizontalStackLayout Margin="0,0,15,0" HorizontalOptions="End" Spacing="20">
+            <ImageButton Command="{Binding DeleteNoteCommand}"
+                         Source="trash_icon.svg"
+                         HeightRequest="35"
+                         WidthRequest="35"/>
+            <ImageButton Command="{Binding SaveNoteCommand}"
+                         Source="check_icon.svg"
+                         HeightRequest="35"
+                         WidthRequest="35"/>
+        </HorizontalStackLayout>
+    </Shell.TitleView>
+
+    <Shell.BackButtonBehavior>
+        <BackButtonBehavior Command="{Binding OnBackButtonClickCommand}" Shell.FlyoutHeight="10" Shell.FlyoutWidth="10"/>
+    </Shell.BackButtonBehavior>
 
     <ContentPage.Behaviors>
         <toolkit:EventToCommandBehavior EventName="Appearing"
@@ -20,21 +33,46 @@
                                         CommandParameter="{x:Reference NoteEditor}"/>
     </ContentPage.Behaviors>
 
-    <Grid RowDefinitions="400,70">
-        <Editor Text="{Binding EditorText}"
-                x:Name="NoteEditor"
-                Placeholder="Enter your note"
-                Margin="10"
-                AutoSize="TextChanges"/>
-        <Grid Grid.Row="1" ColumnDefinitions="*,*" ColumnSpacing="4" Margin="10">
-            <Button Text="Delete"
-                    Command="{Binding DeleteNoteCommand}"/>
-            <Button Text="Save"
-                    Grid.Column="1"
-                    Command="{Binding SaveNoteCommand}"/>
-        </Grid>
-        
-    </Grid>
+    <Editor Text="{Binding EditorText}"
+            x:Name="NoteEditor"
+            Placeholder="Enter your note"
+            Margin="10"
+            AutoSize="TextChanges"/>
+
+    <!--<StackLayout BackgroundColor="White">
+
+        <Label HorizontalOptions="Center" Text="Welcome to .NET MAUI" VerticalOptions="Center"></Label>
+
+        <BoxView BackgroundColor="LightGrey" VerticalOptions="CenterAndExpand"></BoxView>
+
+        <StackLayout Padding="8, 12"
+                     BackgroundColor="White">
+            <Grid Padding="12, 6"
+                  ColumnDefinitions="*,Auto"
+                  ColumnSpacing="10"
+                  RowDefinitions="Auto">
+
+                <ScrollView Grid.Column="0"
+                            HorizontalOptions="Fill"
+                            VerticalScrollBarVisibility="Never"
+                            MaximumHeightRequest="150">
+
+                    <Editor BackgroundColor="White"
+                            AutoSize="TextChanges"
+                            FontSize="Medium"
+                            Keyboard="Chat"
+                            Placeholder="Aa"
+                            TextColor="Gray"></Editor>
+                </ScrollView>
+
+                <Button Text="Send"
+                        Grid.Column="1"
+                        VerticalOptions="End"
+                        TextColor="Black"
+                        BackgroundColor="Transparent"></Button>
+            </Grid>
+        </StackLayout>
+    </StackLayout>-->
 </ContentPage>
 
 <!--CommandParameter="{Binding Source={x:Reference NoteEditor}, Path=Text}"-->

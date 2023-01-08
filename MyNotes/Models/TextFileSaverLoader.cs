@@ -22,7 +22,7 @@
             var notesEnumerable = Directory
                 .EnumerateFiles(_pathToFolder, "*" + _endOfFilename)
                 .Select(pathToFile => new TextFile(pathToFile))
-                .OrderBy(textFile => File.GetCreationTime(textFile.PathToFile))
+                .OrderBy(textFile => File.GetLastWriteTime(textFile.PathToFile))
                 .Reverse();
             return notesEnumerable;
         }

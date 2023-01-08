@@ -16,6 +16,7 @@ namespace MyNotes.ViewModels
         public Command DeleteNoteCommand { get; }
         public Command UpdateEditorTextCommand { get; }
         public Command FocusOnEditorCommand { get; }
+        public Command OnBackButtonClickCommand { get; }
 
         public NotePageViewModel()
         {
@@ -23,12 +24,11 @@ namespace MyNotes.ViewModels
                 execute: async () =>
                 {
                     EditingNote.Text = EditorText;
-                    EditorText = string.Empty;
                     await Shell.Current.GoToAsync("..", true);
                 },
                 canExecute: () =>
                 {
-                    return EditorText != null && EditorText != EditingNote.Text;
+                    return EditorText != string.Empty;
                 });
 
             DeleteNoteCommand = new Command(
@@ -49,6 +49,16 @@ namespace MyNotes.ViewModels
                 {
                     await Task.Delay(600);
                     ((Editor)editor).Focus();
+                });
+
+            OnBackButtonClickCommand = new Command(
+                execute: async () =>
+                {
+                    if (EditingNote.Text == string.Empty)
+                    {
+                        EditingNote.Delete();
+                    }
+                    await Shell.Current.GoToAsync("..", true);
                 });
 
             PropertyChanged += OnPropertyChanged;

@@ -36,14 +36,11 @@
 
         <AbsoluteLayout>
             <ImageButton Source="plus_icon.png"
+                         BackgroundColor="Green"
                          CornerRadius="40"
                          AbsoluteLayout.LayoutFlags="PositionProportional"
                          AbsoluteLayout.LayoutBounds=".95,.95,80,80"
                          Command="{Binding AddNewNoteCommand}"/>
         </AbsoluteLayout>
     </Grid>
-    
-    
-    
-    
 </ContentPage>
