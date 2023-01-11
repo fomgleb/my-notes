@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:MyNotes.ViewModels"
+             xmlns:models="clr-namespace:MyNotes.Models"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="MyNotes.Views.AllNotesPage"
              Title="Notes">
@@ -18,17 +19,23 @@
     <Grid>
         <ListView ItemsSource="{Binding NotesCollection}"
                   HasUnevenRows="True">
-            <ListView.Behaviors>
+            <!--<ListView.Behaviors>
                 <toolkit:EventToCommandBehavior EventName="ItemSelected"
                                                 Command="{Binding EditNoteCommand}"
                                                 EventArgsConverter="{StaticResource SelectedItemEventArgsConverter}"/>
-            </ListView.Behaviors>
+            </ListView.Behaviors>-->
             <ListView.ItemTemplate>
-                <DataTemplate >
+                <DataTemplate x:DataType="models:TextFile">
                     <ViewCell>
-                        <Label Text="{Binding Text}"
-                               FontSize="20"
-                               Padding="15"/>
+                        <Grid>
+                            <Grid.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:AllNotesPageViewModel}}, Path=EditNoteCommand}"
+                                                      CommandParameter="{Binding .}"/>
+                            </Grid.GestureRecognizers>
+                            <Label Text="{Binding Text}"
+                                   FontSize="20"
+                                   Padding="15"/>
+                        </Grid>
                     </ViewCell>
                 </DataTemplate>
             </ListView.ItemTemplate>

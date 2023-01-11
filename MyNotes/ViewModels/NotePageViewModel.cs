@@ -1,78 +1,39 @@
-﻿using MyNotes.Models;
-using System.ComponentModel;
+﻿namespace MyNotes.ViewModels;
 
-namespace MyNotes.ViewModels
+[QueryProperty(nameof(EditingNote), nameof(EditingNote))]
+public partial class NotePageViewModel : ObservableObject
 {
-    [QueryProperty(nameof(EditingNote), nameof(EditingNote))]
-    public class NotePageViewModel : ViewModelBase
+    [ObservableProperty] private string editorText = string.Empty;
+    [ObservableProperty] private TextFile editingNote;
+    [ObservableProperty] private bool editorTextIsEmpty;
+
+    protected override void OnPropertyChanged(PropertyChangedEventArgs e)
     {
-        public string EditorText { get => _editorText; set => Set(ref _editorText, value); }
-        private string _editorText;
+        base.OnPropertyChanged(e);
+        EditorTextIsEmpty = editorText == string.Empty;
+    }
 
-        public TextFile EditingNote { get => _editingNote; set => Set(ref _editingNote, value); }
-        private TextFile _editingNote;
+    [RelayCommand] private async void SaveNote()
+    {
+        EditingNote.Text = EditorText;
+        await Shell.Current.GoToAsync("..", true);
+    }
 
-        public Command SaveNoteCommand { get; }
-        public Command DeleteNoteCommand { get; }
-        public Command UpdateEditorTextCommand { get; }
-        public Command FocusOnEditorCommand { get; }
-        public Command OnBackButtonClickCommand { get; }
+    [RelayCommand] private async void DeleteNote()
+    {
+        EditingNote.Delete();
+        await Shell.Current.GoToAsync("..", true);
+    }
 
-        public NotePageViewModel()
-        {
-            SaveNoteCommand = new Command(
-                execute: async () =>
-                {
-                    EditingNote.Text = EditorText;
-                    await Shell.Current.GoToAsync("..", true);
-                },
-                canExecute: () =>
-                {
-                    return EditorText != string.Empty;
-                });
+    [RelayCommand] private void UpdateEditorText()
+    {
+        EditorText = EditingNote.Text;
+    }
 
-            DeleteNoteCommand = new Command(
-                execute: async () =>
-                {
-                    EditingNote.Delete();
-                    await Shell.Current.GoToAsync("..", true);
-                });
-
-            UpdateEditorTextCommand = new Command(
-                execute: () =>
-                {
-                    EditorText = EditingNote.Text;
-                });
-
-            FocusOnEditorCommand = new Command(
-                execute: async editor =>
-                {
-                    await Task.Delay(600);
-                    ((Editor)editor).Focus();
-                });
-
-            OnBackButtonClickCommand = new Command(
-                execute: async () =>
-                {
-                    if (EditingNote.Text == string.Empty)
-                    {
-                        EditingNote.Delete();
-                    }
-                    await Shell.Current.GoToAsync("..", true);
-                });
-
-            PropertyChanged += OnPropertyChanged;
-        }
-
-        private void OnPropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            RefreshCanExecutes();
-        }
-
-        private void RefreshCanExecutes()
-        {
-            SaveNoteCommand.ChangeCanExecute();
-            DeleteNoteCommand.ChangeCanExecute();
-        }
+    [RelayCommand] private async void OnBackButtonClicked()
+    {
+        if (EditingNote.Text == string.Empty)
+            EditingNote.Delete();
+        await Shell.Current.GoToAsync("..", true);
     }
 }

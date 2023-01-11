@@ -1,7 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
-using CommunityToolkit.Maui;
-
-namespace MyNotes;
+﻿namespace MyNotes;
 
 public static class MauiProgram
 {

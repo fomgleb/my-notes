@@ -1,29 +1,12 @@
-﻿namespace MyNotes.ViewModels
+﻿namespace MyNotes.ViewModels;
+
+public partial class AboutPageViewModel : ObservableObject
 {
-    public class AboutPageViewModel : ViewModelBase
+    public string Title => AppInfo.Name;
+    public string Version => AppInfo.VersionString;
+
+    [RelayCommand] private static async void OpenWebsiteAsync(string url)
     {
-        private const string ABOUT_MAUI_LINK = "https://aka.ms/maui";
-        private const string APP_ON_GITHUB_LINK = "https://github.com/fomgleb/my-notes";
-
-        public string Title => AppInfo.Name;
-        public string Version => AppInfo.VersionString;
-
-        public Command OpenWebsiteAboutMaui { get; }
-        public Command OpenWebsiteAppOnGithub { get; }
-
-        public AboutPageViewModel()
-        {
-            OpenWebsiteAboutMaui = new Command(
-                execute: async () =>
-                {
-                    await Launcher.Default.OpenAsync(ABOUT_MAUI_LINK);
-                });
-
-            OpenWebsiteAppOnGithub = new Command(
-                execute: async () =>
-                {
-                    await Launcher.Default.OpenAsync(APP_ON_GITHUB_LINK);
-                });
-        }
+        await Launcher.Default.OpenAsync(url);
     }
 }

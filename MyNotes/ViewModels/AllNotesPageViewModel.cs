@@ -1,53 +1,40 @@
-﻿using MyNotes.Models;
-using MyNotes.Views;
-using System.Collections.ObjectModel;
+﻿namespace MyNotes.ViewModels;
 
-namespace MyNotes.ViewModels
+public partial class AllNotesPageViewModel : ObservableObject
 {
-    public class AllNotesPageViewModel : ViewModelBase
+    [ObservableProperty] private ObservableCollection<TextFile> notesCollection;
+
+    private readonly TextFilesSaverLoader _notesSaverLoader = new(FileSystem.AppDataDirectory, ".notes.txt");
+
+    public AllNotesPageViewModel()
     {
-        public ObservableCollection<TextFile> NotesCollection { get => _notesCollection; set => Set(ref _notesCollection, value); }
-        private ObservableCollection<TextFile> _notesCollection;
+        NotesCollection = new ObservableCollection<TextFile>(_notesSaverLoader.Load());
 
-        private readonly TextFilesSaverLoader _notesSaverLoader = new(FileSystem.AppDataDirectory, ".notes.txt");
+        Shell.Current.Navigating += OnNavigating;
+    }
 
-        public Command AddNewNoteCommand { get; }
-        public Command EditNoteCommand { get; }
+    [RelayCommand] private async void AddNewNote()
+    {
+        await Shell.Current.GoToAsync(nameof(NotePage), new Dictionary<string, object>
+        {
+            { nameof(NotePageViewModel.EditingNote), _notesSaverLoader.CreateFile(string.Empty) }
+        });
+    }
 
-        public AllNotesPageViewModel()
+    [RelayCommand] private async void EditNote(object selectedNote)
+    {
+        if (selectedNote == null) return;
+        await Shell.Current.GoToAsync(nameof(NotePage), new Dictionary<string, object>
+        {
+            { nameof(NotePageViewModel.EditingNote), selectedNote }
+        });
+    }
+
+    private void OnNavigating(object sender, ShellNavigatingEventArgs e)
+    {
+        if (e.Target.Location.OriginalString == "..")
         {
             NotesCollection = new ObservableCollection<TextFile>(_notesSaverLoader.Load());
-
-            AddNewNoteCommand = new Command(
-                execute: async () =>
-                {
-                    var navigationParameter = new Dictionary<string, object>
-                    {
-                        { nameof(NotePageViewModel.EditingNote), _notesSaverLoader.CreateFile(string.Empty) }
-                    };
-                    await Shell.Current.GoToAsync(nameof(NotePage), navigationParameter);
-                });
-
-            EditNoteCommand = new Command(
-                execute: async selectedNote =>
-                {
-                    if (selectedNote == null) return;
-                    var navigationParameter = new Dictionary<string, object>
-                    {
-                        { nameof(NotePageViewModel.EditingNote), selectedNote }
-                    };
-                    await Shell.Current.GoToAsync(nameof(NotePage), navigationParameter);
-                });
-
-            Shell.Current.Navigating += OnNavigating;
-        }
-
-        private void OnNavigating(object sender, ShellNavigatingEventArgs e)
-        {
-            if (e.Target.Location.OriginalString == "..")
-            {
-                NotesCollection = new ObservableCollection<TextFile>(_notesSaverLoader.Load());
-            }
         }
     }
 }

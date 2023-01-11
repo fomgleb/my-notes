@@ -1,0 +1,14 @@
+﻿global using System;
+global using System.Collections.Generic;
+global using System.Collections.ObjectModel;
+global using System.ComponentModel;
+global using System.Linq;
+global using System.Text;
+global using System.Threading.Tasks;
+global using System.Runtime.CompilerServices;
+global using Microsoft.Extensions.Logging;
+global using CommunityToolkit.Maui;
+global using CommunityToolkit.Mvvm.ComponentModel;
+global using CommunityToolkit.Mvvm.Input;
+global using MyNotes.Models;
+global using MyNotes.Views;

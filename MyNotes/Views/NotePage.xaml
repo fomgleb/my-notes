@@ -12,25 +12,24 @@
         <HorizontalStackLayout Margin="0,0,15,0" HorizontalOptions="End" Spacing="20">
             <ImageButton Command="{Binding DeleteNoteCommand}"
                          Source="trash_icon.svg"
-                         HeightRequest="35"
-                         WidthRequest="35"/>
+                         HeightRequest="30"
+                         WidthRequest="30">
+            </ImageButton>
             <ImageButton Command="{Binding SaveNoteCommand}"
+                         IsEnabled="{Binding EditorTextIsEmpty, Converter={toolkit:InvertedBoolConverter}}"
                          Source="check_icon.svg"
-                         HeightRequest="35"
-                         WidthRequest="35"/>
+                         HeightRequest="30"
+                         WidthRequest="30"/>
         </HorizontalStackLayout>
     </Shell.TitleView>
 
     <Shell.BackButtonBehavior>
-        <BackButtonBehavior Command="{Binding OnBackButtonClickCommand}"/>
+        <BackButtonBehavior Command="{Binding BackButtonClickedCommand}"/>
     </Shell.BackButtonBehavior>
 
     <ContentPage.Behaviors>
         <toolkit:EventToCommandBehavior EventName="Appearing"
                                         Command="{Binding UpdateEditorTextCommand}"/>
-        <toolkit:EventToCommandBehavior EventName="Appearing"
-                                        Command="{Binding FocusOnEditorCommand}"
-                                        CommandParameter="{x:Reference NoteEditor}"/>
     </ContentPage.Behaviors>
 
     <Editor Text="{Binding EditorText}"
