@@ -3,4 +3,4 @@
 2. Install the downloaded apk file on android
 
 # Demonstration
-https://github.com/fomgleb/my-notes/assets/60964034/26dd367c-0a58-416f-8998-05d67e85315c
+https://github.com/fomgleb/my-notes/assets/60964034/5fbf1c0f-a727-46b1-b2da-649c445acb8a
